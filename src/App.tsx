@@ -1,7 +1,8 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { TodoItem } from './components/TodoItem'
 
-type TodoItemType = {
+export type TodoItemType = {
   id: number
   text: string
   complete: boolean
@@ -13,7 +14,7 @@ export function App() {
   const [todoItems, setTodoItems] = useState<TodoItemType[]>([])
   const [newTodoText, setNewTodoText] = useState('')
 
-  useEffect(function () {
+  function loadAllItems() {
     async function loadItems() {
       const response = await axios.get(
         'https://one-list-api.herokuapp.com/items?access_token=kristy-prieto'
@@ -25,7 +26,9 @@ export function App() {
     }
 
     loadItems()
-  }, [])
+  }
+
+  useEffect(loadAllItems, [])
 
   async function handleCreateNewTodoItem() {
     const response = await axios.post(
@@ -34,11 +37,7 @@ export function App() {
     )
 
     if (response.status === 201) {
-      const newTodo = response.data
-
-      const newTodoItems = [...todoItems, newTodo]
-
-      setTodoItems(newTodoItems)
+      loadAllItems()
       setNewTodoText('')
     }
   }
@@ -51,9 +50,9 @@ export function App() {
 
       <main>
         <ul>
-          {todoItems.map(function (todoItem) {
-            return <li key={todoItem.id} className={todoItem.complete ? 'completed' : ''}>{todoItem.text}</li>
-          })}
+        {todoItems.map(function (todoItem) {
+          return <TodoItem key={todoItem.id} todoItem={todoItem} reloadItems={loadAllItems}/>
+        })}
         </ul> 
         
         <form
@@ -75,5 +74,7 @@ export function App() {
       <footer>
         <p>&copy; 2020 Suncoast Developers Guild</p>
       </footer>
-</div> )
+    </div> 
+  )
 }
+
