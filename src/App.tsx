@@ -1,6 +1,6 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { TodoItem } from './components/TodoItem'
+import React from 'react'
+import { TodoList } from './components/TodoList'
+import { Route, Routes } from 'react-router'
 
 export type TodoItemType = {
   id: number
@@ -11,36 +11,7 @@ export type TodoItemType = {
 }
 
 export function App() {
-  const [todoItems, setTodoItems] = useState<TodoItemType[]>([])
-  const [newTodoText, setNewTodoText] = useState('')
-
-  function loadAllItems() {
-    async function loadItems() {
-      const response = await axios.get(
-        'https://one-list-api.herokuapp.com/items?access_token=kristy-prieto'
-      )
-
-      if (response.status === 200) {
-        setTodoItems(response.data)
-      }
-    }
-
-    loadItems()
-  }
-
-  useEffect(loadAllItems, [])
-
-  async function handleCreateNewTodoItem() {
-    const response = await axios.post(
-      'https://one-list-api.herokuapp.com/items?access_token=kristy-prieto',
-      { item: { text: newTodoText } }
-    )
-
-    if (response.status === 201) {
-      loadAllItems()
-      setNewTodoText('')
-    }
-  }
+  
 
   return (
     <div className="app">
@@ -49,26 +20,9 @@ export function App() {
       </header>
 
       <main>
-        <ul>
-        {todoItems.map(function (todoItem) {
-          return <TodoItem key={todoItem.id} todoItem={todoItem} reloadItems={loadAllItems}/>
-        })}
-        </ul> 
-        
-        <form
-          onSubmit={function (event) {
-            event.preventDefault()
-
-            handleCreateNewTodoItem()
-          }}
-        >
-          <input
-            type="text"
-            placeholder="Whats up?" 
-            value={newTodoText}
-            onChange={(event) => setNewTodoText(event.target.value)}
-          />
-        </form>
+        <Routes>
+          <Route path='/' element={<TodoList/>} />
+        </Routes>
       </main>
 
       <footer>
@@ -77,4 +31,5 @@ export function App() {
     </div> 
   )
 }
+
 
