@@ -1,5 +1,6 @@
 import React from 'react'
-import { TodoList } from './components/TodoList'
+import { TodoList } from './pages/TodoList'
+import { TodoItemPage } from './pages/TodoItemPage'
 import { Route, Routes } from 'react-router'
 
 export type TodoItemType = {
@@ -22,6 +23,8 @@ export function App() {
       <main>
         <Routes>
           <Route path='/' element={<TodoList/>} />
+          <Route path='/items/:id' element={<TodoItemPage/>}/>
+          <Route path='*' element={<p>Ooops, that URL is unknown.</p>}/>
         </Routes>
       </main>
 
