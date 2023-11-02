@@ -24,7 +24,7 @@ export function TodoItem({ todoItem, reloadItems }: TodoItemProps) {
       className={todoItem.complete ? 'completed' : ''}
       onClick={toggleCompleteStatus}
     >
-      {todoItem.text}
+      {todoItem.text.toString()}
     </li>
   );
 }
