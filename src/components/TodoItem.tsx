@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import { TodoItemType } from '../App';
+import { Link } from 'react-router-dom';
 
 type TodoItemProps = {
   todoItem: TodoItemType;
@@ -25,6 +26,7 @@ export function TodoItem({ todoItem, reloadItems }: TodoItemProps) {
       onClick={toggleCompleteStatus}
     >
       {todoItem.text}
+      <Link to={`/items/${todoItem.id}`}>Show</Link>
     </li>
   );
 }
